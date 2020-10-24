@@ -82,7 +82,20 @@ function uppercase(): Parser<char> {
   return sat((d) => d.toUpperCase() == d)
 }
 
-// plus concats the results of p and q
+// letter parses [a-z, A-Z]
+function letter(): Parser<char> {
+  return plus(lowercase(), uppercase())
+}
+
+// alphanum parses [a-z, A-Z, 0-9]
+function alphanum(): Parser<char> {
+  return plus(letter(), digit())
+}
+
+// plus acts like an "or" / "either" operator
+// it uses `p` or `q` to parse the input
+// note: it can return an array of both outputs
+// this can happen if both `p` and `q` parse successfully
 function plus<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
   return (input) => p(input).concat(q(input))
 }
