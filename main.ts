@@ -1,4 +1,4 @@
-type Parser<T> = (s: string) => [[T, string]?];
+type Parser<T> = (s: string) => Array<[T, string]>;
 type char = string;
 
 function result<T>(v: T): Parser<T> {
@@ -21,11 +21,10 @@ function item(): Parser<char> {
 }
 
 function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
-  return (input) => {
-    return p(input).map(([output, inputPrime]) => fn(output)(inputPrime))[0];
-    // const [output, inputPrime] = p(input)[0];
-    // return fn(output)(inputPrime);
-  };
+  return (input) =>
+    p(input)
+      .map(([output, inputPrime]) => fn(output)(inputPrime))
+      .flat();
 }
 
 // function fst<T, U>(tuple: [T, U]): T {
