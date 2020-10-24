@@ -4,6 +4,27 @@
 type Parser<T> = (s: string) => Array<[T, string]>
 type char = string
 
+function main() {
+  let examples = ["HEllo", "PEsho", "GOsho", "AAzzz"]
+
+  const helloParser = bind(uppercase(), (ch1) =>
+    bind(uppercase(), (ch2) =>
+      bind(lowercase(), (ch3) =>
+        bind(lowercase(), (ch4) =>
+          bind(lowercase(), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
+        )
+      )
+    )
+  )
+
+  console.log(
+    examples.map((element) => {
+      return helloParser(element)
+    })
+  )
+}
+main()
+
 // result unconditionally returns the value
 function result<T>(v: T): Parser<T> {
   return (input) => [[v, input]]
@@ -65,24 +86,3 @@ function uppercase(): Parser<char> {
 function plus<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
   return (input) => p(input).concat(q(input))
 }
-
-function main() {
-  let examples = ["HEllo", "PEsho", "GOsho", "AAzzz"]
-
-  const helloParser = bind(uppercase(), (ch1) =>
-    bind(uppercase(), (ch2) =>
-      bind(lowercase(), (ch3) =>
-        bind(lowercase(), (ch4) =>
-          bind(lowercase(), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
-        )
-      )
-    )
-  )
-
-  console.log(
-    examples.map((element) => {
-      return helloParser(element)
-    })
-  )
-}
-main()
