@@ -1,14 +1,20 @@
+// Parser takes in input and returns either an empty array or a singleton array.
+// Singleton array with a tuple of the parsed value and the rest of the input means it parsed successfully
+// Empty array means it failed parsing
 type Parser<T> = (s: string) => Array<[T, string]>;
 type char = string;
 
+// result unconditionally returns the value
 function result<T>(v: T): Parser<T> {
   return (input) => [[v, input]];
 }
 
+// zero always fails
 function zero<T>(): Parser<T> {
   return (_) => [];
 }
 
+// item parses one character and returns the rest
 function item(): Parser<char> {
   return (input) => {
     switch (input) {
@@ -20,6 +26,7 @@ function item(): Parser<char> {
   };
 }
 
+// bind combines 2 parsers
 function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
   return (input) =>
     p(input)
@@ -27,18 +34,26 @@ function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
       .flat();
 }
 
-// function fst<T, U>(tuple: [T, U]): T {
-//   return tuple[0];
-// }
+// sat parses characters, until the predicate returns false
+function sat(pred: (c: char) => boolean): Parser<char> {
+  return bind(item(), (ch) => (pred(ch) ? result(ch) : zero()));
+}
 
-// function snd<T, U>(tuple: [T, U]): U {
-//   return tuple[1];
-// }
+// char parses a specific character
+function char(c: char): Parser<char> {
+  return sat((d) => d == c);
+}
 
-// function head<T>(x: string | T[]) {
-//   return x[0];
-// }
-
-// function tail<T>([, ...xs]: string | T[]) {
-//   return xs;
-// }
+function main() {
+  const bParser = char("b");
+  let start = "bbbbbbbbbbbbb";
+  while (true) {
+    const out = bParser(start);
+    if (out.length == 0) {
+      return;
+    }
+    console.log(out[0]);
+    start = out[0][1];
+  }
+}
+main();
