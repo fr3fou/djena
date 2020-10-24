@@ -1,4 +1,14 @@
-import { bind, digit, either, many, Parser, result, stringP } from "./parse.ts"
+import {
+  bind,
+  charP,
+  digit,
+  either,
+  many,
+  Parser,
+  result,
+  sat,
+  stringP,
+} from "./parse.ts"
 
 export class JsonBool {
   constructor(readonly value: boolean) {}
@@ -44,4 +54,15 @@ export function jsonNumber(): Parser<JsonValue> {
   return bind(many(digit()), (d) => {
     return result(new JsonNumber(Number(d.join(""))))
   })
+}
+
+export function jsonString(): Parser<JsonValue> {
+  return bind(
+    bind(charP('"'), (_) =>
+      bind(many(sat((b) => b != '"')), (v) =>
+        bind(charP('"'), (_) => result(v))
+      )
+    ),
+    (v) => result(new JsonString(v.join("")))
+  )
 }

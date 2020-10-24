@@ -41,11 +41,6 @@ export function sat(pred: (c: char) => boolean): Parser<char> {
   return bind(item(), (ch) => (pred(ch) ? result(ch) : zero()))
 }
 
-// char parses a specific character
-export function char(c: char): Parser<char> {
-  return sat((d) => d == c)
-}
-
 // digit parses a single digit
 export function digit(): Parser<char> {
   return sat((d) => d >= "0" && d <= "9")
@@ -87,18 +82,18 @@ export function many<T>(p: Parser<T>): Parser<T[]> {
   )
 }
 
-// word parses a word (sequence of letters)
-export function word(): Parser<char[]> {
-  return many(letter())
-}
-
 // stringP parses a specific string
 export function stringP(str: string): Parser<string> {
   if (str === "") {
     return result("")
   }
 
-  return bind(char(str[0]), (ch) =>
+  return bind(charP(str[0]), (ch) =>
     bind(stringP(str.slice(1)), (str) => result(ch + str))
   )
+}
+
+// char parses a specific character
+export function charP(c: char): Parser<char> {
+  return sat((d) => d == c)
 }

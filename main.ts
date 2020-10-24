@@ -1,6 +1,6 @@
-import { jsonNumber } from "./json.ts"
+import { jsonString } from "./json.ts"
 
 function main() {
-  console.log(jsonNumber()("12f34"))
+  console.log(jsonString()('"owo"'))
 }
 main()
