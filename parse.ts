@@ -68,10 +68,14 @@ export function alphanum(): Parser<char> {
 
 // either acts like an "or" / "either" operator
 // it uses `p` or `q` to parse the input
-// note: it can return an array of both outputs
-// this can happen if both `p` and `q` parse successfully
 export function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
-  return (input) => p(input).concat(q(input))
+  return (input) => {
+    const first = p(input)
+    if (first.length === 0) {
+      return q(input)
+    }
+    return first
+  }
 }
 
 // many parses with p, until it can't take anymore
