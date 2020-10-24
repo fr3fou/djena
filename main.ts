@@ -102,6 +102,7 @@ function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
   return (input) => p(input).concat(q(input))
 }
 
+// word parses a word (sequence of letters)
 function word(): Parser<string> {
   let wordParser = bind(letter(), (x) => bind(word(), (xs) => result(x + xs)))
   return either(wordParser, result(""))
