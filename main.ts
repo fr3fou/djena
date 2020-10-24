@@ -7,21 +7,23 @@ type char = string
 function main() {
   let examples = ["HEllo", "PEsho", "GOsho", "AAzzz"]
 
-  const helloParser = bind(uppercase(), (ch1) =>
-    bind(uppercase(), (ch2) =>
-      bind(lowercase(), (ch3) =>
-        bind(lowercase(), (ch4) =>
-          bind(lowercase(), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
-        )
-      )
-    )
-  )
+  // const helloParser = bind(uppercase(), (ch1) =>
+  //   bind(uppercase(), (ch2) =>
+  //     bind(lowercase(), (ch3) =>
+  //       bind(lowercase(), (ch4) =>
+  //         bind(lowercase(), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
+  //       )
+  //     )
+  //   )
+  // )
+  const wordParser = word()
+  console.log(wordParser("Yes!"))
 
-  console.log(
-    examples.map((element) => {
-      return helloParser(element)
-    })
-  )
+  // console.log(
+  //   examples.map((element) => {
+  //     return wordParser(element)
+  //   })
+  // )
 }
 main()
 
@@ -74,7 +76,7 @@ function digit(): Parser<char> {
 
 // lowercase parses a lowercase character
 function lowercase(): Parser<char> {
-  return sat((d) => d.toLowerCase() == d)
+  return sat((d) => d > "a" && d < "z")
 }
 
 // uppercase parses an uppercase character
@@ -98,4 +100,9 @@ function alphanum(): Parser<char> {
 // this can happen if both `p` and `q` parse successfully
 function plus<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
   return (input) => p(input).concat(q(input))
+}
+
+function word(): Parser<string> {
+  let wordParser = bind(letter(), (x) => bind(word(), (xs) => result(x + xs)))
+  return plus(wordParser, result(""))
 }
