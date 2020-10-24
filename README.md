@@ -1,2 +1,3 @@
-# jr
-🗺 Like jq but in go and worse
+# json-go
+
+JSON parser in go
