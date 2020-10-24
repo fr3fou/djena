@@ -88,9 +88,16 @@ function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
 }
 
 // word parses a word (sequence of letters)
-function word(): Parser<string> {
-  let wordParser = bind(letter(), (x) => bind(word(), (xs) => result(x + xs)))
-  return either(wordParser, result(""))
+function word(): Parser<char[]> {
+  return many(letter())
+}
+
+// many parses p, until it can't take anymore
+function many<T>(p: Parser<T>): Parser<T[]> {
+  return either(
+    bind(p, (x) => bind(many(p), (y) => result([x, y]))),
+    result([])
+  )
 }
 
 // stringP parses a specific string
