@@ -79,7 +79,7 @@ export function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
   return (input) => p(input).concat(q(input))
 }
 
-// many parses p, until it can't take anymore
+// many parses with p, until it can't take anymore
 export function many<T>(p: Parser<T>): Parser<T[]> {
   return either(
     bind(p, (x) => bind(many(p), (y) => result([x, ...y]))),

@@ -1,6 +1,6 @@
-import { jsonBool } from "./json.ts"
+import { jsonNumber } from "./json.ts"
 
 function main() {
-  console.log(jsonBool()("fal"))
+  console.log(jsonNumber()("12f34"))
 }
 main()
