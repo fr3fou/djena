@@ -5,25 +5,10 @@ type Parser<T> = (s: string) => Array<[T, string]>
 type char = string
 
 function main() {
-  let examples = ["HEllo", "PEsho", "GOsho", "AAzzz"]
-
-  // const helloParser = bind(uppercase(), (ch1) =>
-  //   bind(uppercase(), (ch2) =>
-  //     bind(lowercase(), (ch3) =>
-  //       bind(lowercase(), (ch4) =>
-  //         bind(lowercase(), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
-  //       )
-  //     )
-  //   )
-  // )
-  const wordParser = word()
-  console.log(wordParser("Yes!"))
-
-  // console.log(
-  //   examples.map((element) => {
-  //     return wordParser(element)
-  //   })
-  // )
+  const helloParser = bind(char("h"), (ch) =>
+    bind(char("i"), (ch2) => result(ch + ch2))
+  )
+  console.log(helloParser("hii"))
 }
 main()
 
@@ -106,4 +91,15 @@ function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
 function word(): Parser<string> {
   let wordParser = bind(letter(), (x) => bind(word(), (xs) => result(x + xs)))
   return either(wordParser, result(""))
+}
+
+// stringP parses a specific string
+function stringP(str: string): Parser<string> {
+  if (str === "") {
+    return result("")
+  }
+
+  return bind(char(str[0]), (ch) =>
+    bind(stringP(str.slice(1)), (str) => result(ch + str))
+  )
 }
