@@ -72,6 +72,7 @@ function main() {
       )
     )
   )
+
   console.log(
     examples.map((element) => {
       return helloParser(element)
