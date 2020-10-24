@@ -1,4 +1,4 @@
-# deno-json
+# djena
 
 JSON parser in <https://deno.land> / TypeScript
 
