@@ -8,6 +8,7 @@ import {
   result,
   sat,
   stringP,
+  zero,
 } from "./parse.ts"
 
 export class JsonBool {
@@ -46,14 +47,14 @@ export function jsonNull(): Parser<JsonValue> {
 
 export function jsonBool(): Parser<JsonValue> {
   return bind(either(stringP("true"), stringP("false")), (v) =>
-    result(new JsonBool(v === "true"))
+    v.length === 0 ? zero() : result(new JsonBool(v === "true"))
   )
 }
 
 export function jsonNumber(): Parser<JsonValue> {
-  return bind(many(digit()), (d) => {
-    return result(new JsonNumber(Number(d.join(""))))
-  })
+  return bind(many(digit()), (d) =>
+    d.length === 0 ? zero() : result(new JsonNumber(Number(d.join(""))))
+  )
 }
 
 export function jsonString(): Parser<JsonValue> {
@@ -63,6 +64,24 @@ export function jsonString(): Parser<JsonValue> {
         bind(charP('"'), (_) => result(v))
       )
     ),
-    (v) => result(new JsonString(v.join("")))
+    (v) => (v.length === 0 ? zero() : result(new JsonString(v.join(""))))
+  )
+}
+
+// export function jsonArray(): Parser<JsonValue> {}
+
+// export function jsonObject(): Parser<JsonValue> {}
+
+export function jsonValue(): Parser<JsonValue> {
+  return either(
+    jsonNull(),
+    either(
+      jsonNumber(),
+      either(
+        jsonBool(),
+        jsonString()
+        // either(jsonString(), either(jsonArray(), jsonObject()))
+      )
+    )
   )
 }
