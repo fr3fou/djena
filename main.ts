@@ -19,3 +19,10 @@ function item(): Parser<char> {
     }
   };
 }
+
+function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
+  return (input) => {
+    const [output, inputPrime] = p(input)[0];
+    return fn(output)(inputPrime);
+  };
+}
