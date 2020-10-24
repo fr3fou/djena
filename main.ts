@@ -22,7 +22,24 @@ function item(): Parser<char> {
 
 function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
   return (input) => {
-    const [output, inputPrime] = p(input)[0];
-    return fn(output)(inputPrime);
+    return p(input).map(([output, inputPrime]) => fn(output)(inputPrime))[0];
+    // const [output, inputPrime] = p(input)[0];
+    // return fn(output)(inputPrime);
   };
 }
+
+// function fst<T, U>(tuple: [T, U]): T {
+//   return tuple[0];
+// }
+
+// function snd<T, U>(tuple: [T, U]): U {
+//   return tuple[1];
+// }
+
+// function head<T>(x: string | T[]) {
+//   return x[0];
+// }
+
+// function tail<T>([, ...xs]: string | T[]) {
+//   return xs;
+// }
