@@ -1,6 +1,6 @@
-import { word } from "./parse.ts"
+import { jsonNull } from "./json.ts"
 
 function main() {
-  console.log(word()("hii"))
+  console.log(jsonNull()("nul"))
 }
 main()
