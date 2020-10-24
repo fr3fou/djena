@@ -26,7 +26,8 @@ function item(): Parser<char> {
   }
 }
 
-// bind combines 2 parsers
+// bind binds 2 parsers
+// It's equivalent to haskell's monad >>= operator
 function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
   return (input) =>
     p(input)
@@ -58,6 +59,11 @@ function lowercase(): Parser<char> {
 // uppercase parses an uppercase character
 function uppercase(): Parser<char> {
   return sat((d) => d.toUpperCase() == d)
+}
+
+// plus concats the results of p and q
+function plus<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
+  return (input) => p(input).concat(q(input))
 }
 
 function main() {
