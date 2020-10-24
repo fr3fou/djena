@@ -34,7 +34,8 @@ function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
       .flat()
 }
 
-// sat parses characters, until the predicate returns false
+// sat parses a single character and if it matches the predicate,
+// it returns a result, otherwise it returns an empty array
 function sat(pred: (c: char) => boolean): Parser<char> {
   return bind(item(), (ch) => (pred(ch) ? result(ch) : zero()))
 }
@@ -62,16 +63,19 @@ function uppercase(): Parser<char> {
 function main() {
   let examples = ["HEllo", "PEsho", "GOsho", "AAzzz"]
 
-  const helloParser = bind(char("H"), (ch1) =>
-    bind(char("E"), (ch2) =>
-      bind(char("l"), (ch3) =>
-        bind(char("l"), (ch4) =>
-          bind(char("o"), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
+  const helloParser = bind(uppercase(), (ch1) =>
+    bind(uppercase(), (ch2) =>
+      bind(lowercase(), (ch3) =>
+        bind(lowercase(), (ch4) =>
+          bind(lowercase(), (ch5) => result([ch1, ch2, ch3, ch4, ch5]))
         )
       )
     )
   )
-  let start = "HEllo"
-  console.log(helloParser(start))
+  console.log(
+    examples.map((element) => {
+      return helloParser(element)
+    })
+  )
 }
 main()
