@@ -79,7 +79,7 @@ function lowercase(): Parser<char> {
 
 // uppercase parses an uppercase character
 function uppercase(): Parser<char> {
-  return sat((d) => d.toUpperCase() == d)
+  return sat((d) => d > "A" && d < "Z")
 }
 
 // letter parses [a-z, A-Z]
