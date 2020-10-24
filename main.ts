@@ -1,10 +1,21 @@
-type Parser<T> = (s: string) => [[T, string]];
+type Parser<T> = (s: string) => [[T, string]?];
+type char = string;
 
 function result<T>(v: T): Parser<T> {
   return (input) => [[v, input]];
 }
 
-// // wip
-// const parseInteger: Parser<number> = (s: string) => {
-//   return [[5, s]];
-// };
+function zero<T>(): Parser<T> {
+  return (_) => [];
+}
+
+function item(): Parser<char> {
+  return (input) => {
+    switch (input) {
+      case "":
+        return [];
+      default:
+        return [[input[0], input.slice(1)]];
+    }
+  };
+}
