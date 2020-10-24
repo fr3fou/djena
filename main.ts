@@ -86,23 +86,23 @@ function uppercase(): Parser<char> {
 
 // letter parses [a-z, A-Z]
 function letter(): Parser<char> {
-  return plus(lowercase(), uppercase())
+  return either(lowercase(), uppercase())
 }
 
 // alphanum parses [a-z, A-Z, 0-9]
 function alphanum(): Parser<char> {
-  return plus(letter(), digit())
+  return either(letter(), digit())
 }
 
-// plus acts like an "or" / "either" operator
+// either acts like an "or" / "either" operator
 // it uses `p` or `q` to parse the input
 // note: it can return an array of both outputs
 // this can happen if both `p` and `q` parse successfully
-function plus<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
+function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
   return (input) => p(input).concat(q(input))
 }
 
 function word(): Parser<string> {
   let wordParser = bind(letter(), (x) => bind(word(), (xs) => result(x + xs)))
-  return plus(wordParser, result(""))
+  return either(wordParser, result(""))
 }
