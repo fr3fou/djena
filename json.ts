@@ -1,4 +1,4 @@
-import { bind, Parser, result, stringP } from "./parse.ts"
+import { bind, either, Parser, result, stringP } from "./parse.ts"
 
 export class JsonBool {
   constructor(readonly value: boolean) {}
@@ -32,4 +32,10 @@ export type JsonValue =
 
 export function jsonNull(): Parser<JsonValue> {
   return bind(stringP("null"), (_) => result(new JsonNull()))
+}
+
+export function jsonBool(): Parser<JsonValue> {
+  return bind(either(stringP("true"), stringP("false")), (v) =>
+    result(new JsonBool(v === "true"))
+  )
 }

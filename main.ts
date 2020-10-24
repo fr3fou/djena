@@ -1,6 +1,6 @@
-import { jsonNull } from "./json.ts"
+import { jsonBool } from "./json.ts"
 
 function main() {
-  console.log(jsonNull()("nul"))
+  console.log(jsonBool()("fal"))
 }
 main()
