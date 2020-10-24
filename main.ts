@@ -35,7 +35,7 @@ function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
 }
 
 // sat parses a single character and if it matches the predicate,
-// it returns a result, otherwise it returns an empty array
+// it returns a result(), otherwise it returns a zero()
 function sat(pred: (c: char) => boolean): Parser<char> {
   return bind(item(), (ch) => (pred(ch) ? result(ch) : zero()))
 }
