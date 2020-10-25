@@ -60,14 +60,7 @@ export function jsonNumber(): Parser<JsonValue> {
 }
 
 export function jsonString(): Parser<JsonValue> {
-  return bind(
-    bind(charP('"'), (_) =>
-      bind(many(sat((b) => b != '"')), (v) =>
-        bind(charP('"'), (_) => result(v))
-      )
-    ),
-    (v) => result(new JsonString(v.join("")))
-  )
+  return bind(stringLiteral(), (v) => result(new JsonString(v.join(""))))
 }
 
 export function jsonArray(): Parser<JsonValue> {
