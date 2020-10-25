@@ -7,7 +7,9 @@ import {
   Parser,
   result,
   sat,
+  sepBy,
   stringP,
+  whitespace,
   zero,
 } from "./parse.ts"
 
@@ -47,7 +49,7 @@ export function jsonNull(): Parser<JsonValue> {
 
 export function jsonBool(): Parser<JsonValue> {
   return bind(either(stringP("true"), stringP("false")), (v) =>
-    v.length === 0 ? zero() : result(new JsonBool(v === "true"))
+    result(new JsonBool(v === "true"))
   )
 }
 
@@ -64,13 +66,29 @@ export function jsonString(): Parser<JsonValue> {
         bind(charP('"'), (_) => result(v))
       )
     ),
-    (v) => (v.length === 0 ? zero() : result(new JsonString(v.join(""))))
+    (v) => result(new JsonString(v.join("")))
   )
 }
 
-// export function jsonArray(): Parser<JsonValue> {}
+export function jsonArray(): Parser<JsonValue> {
+  const elements = sepBy(
+    bind(whitespace(), (_) => bind(charP(","), (_) => whitespace())),
+    jsonValue()
+  )
+  return bind(charP("["), (_) =>
+    bind(whitespace(), (_) =>
+      bind(elements, (v) =>
+        bind(whitespace(), (_) =>
+          bind(charP("]"), (_) => result(new JsonArray(v)))
+        )
+      )
+    )
+  )
+}
 
-// export function jsonObject(): Parser<JsonValue> {}
+export function jsonObject(): Parser<JsonValue> {
+  return result("hi")
+}
 
 export function jsonValue(): Parser<JsonValue> {
   return either(
@@ -79,8 +97,7 @@ export function jsonValue(): Parser<JsonValue> {
       jsonNumber(),
       either(
         jsonBool(),
-        jsonString()
-        // either(jsonString(), either(jsonArray(), jsonObject()))
+        either(jsonString(), either(jsonArray(), jsonObject()))
       )
     )
   )
