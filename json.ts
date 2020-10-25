@@ -26,7 +26,7 @@ export class JsonNumber {
 }
 
 export class JsonObject {
-  constructor(readonly value: Array<[string, JsonValue]>) {}
+  constructor(readonly pairs: Array<[string, JsonValue]>) {}
 }
 
 export class JsonArray {
