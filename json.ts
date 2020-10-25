@@ -82,21 +82,27 @@ export function jsonArray(): Parser<JsonValue> {
 
 export function jsonObject(): Parser<JsonValue> {
   return bind(charP("{"), (_) =>
-    bind(
-      many(
+    bind(whitespace(), (_) =>
+      bind(
         sepBy(
           bind(whitespace(), (_) => bind(charP(","), (_) => whitespace())),
           bind(stringLiteral(), (k) =>
-            bind(charP(":"), (_) =>
-              bind(jsonValue(), (v) => result({ key: k.join(""), value: v }))
+            bind(whitespace(), (_) =>
+              bind(charP(":"), (_) =>
+                bind(whitespace(), (_) =>
+                  bind(jsonValue(), (v) => result({ k: k.join(""), v }))
+                )
+              )
             )
           )
-        )
-      ),
-      (kvs) =>
-        bind(charP("}"), (_) =>
-          result(new JsonObject(kvs.map((kv) => [kv[0].key, kv[0].value])))
-        )
+        ),
+        (kvs) =>
+          bind(whitespace(), (_) =>
+            bind(charP("}"), (_) =>
+              result(new JsonObject(kvs.map((kv) => [kv.k, kv.v])))
+            )
+          )
+      )
     )
   )
 }
