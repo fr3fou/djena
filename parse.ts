@@ -46,26 +46,6 @@ export function digit(): Parser<char> {
   return sat((d) => d >= "0" && d <= "9")
 }
 
-// lowercase parses a lowercase character
-export function lowercase(): Parser<char> {
-  return sat((d) => d > "a" && d < "z")
-}
-
-// uppercase parses an uppercase character
-export function uppercase(): Parser<char> {
-  return sat((d) => d > "A" && d < "Z")
-}
-
-// letter parses [a-z, A-Z]
-export function letter(): Parser<char> {
-  return either(lowercase(), uppercase())
-}
-
-// alphanum parses [a-z, A-Z, 0-9]
-export function alphanum(): Parser<char> {
-  return either(letter(), digit())
-}
-
 // either acts like an "or" / "either" operator
 // it uses `p` or `q` to parse the input
 export function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
@@ -103,6 +83,12 @@ export function whitespace(): Parser<string[]> {
   return many(sat((v) => v.trim() === ""))
 }
 
+export function stringLiteral(): Parser<string[]> {
+  return bind(charP('"'), (_) =>
+    bind(many(sat((b) => b != '"')), (v) => bind(charP('"'), (_) => result(v)))
+  )
+}
+
 // stringP parses a specific string
 export function stringP(str: string): Parser<string> {
   if (str === "") {
@@ -111,12 +97,6 @@ export function stringP(str: string): Parser<string> {
 
   return bind(charP(str[0]), (ch) =>
     bind(stringP(str.slice(1)), (str) => result(ch + str))
-  )
-}
-
-export function stringLiteral(): Parser<string[]> {
-  return bind(charP('"'), (_) =>
-    bind(many(sat((b) => b != '"')), (v) => bind(charP('"'), (_) => result(v)))
   )
 }
 
