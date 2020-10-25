@@ -70,13 +70,13 @@ export function jsonArray(): Parser<JsonValue> {
         sepBy(
           bind(whitespace(), (_) => bind(charP(","), (_) => whitespace())),
           jsonValue()
-  )
-  return bind(charP("["), (_) =>
-    bind(whitespace(), (_) =>
+        ),
+        (v) =>
+          bind(whitespace(), (_) =>
       bind(elements, (v) =>
         bind(whitespace(), (_) =>
-          bind(charP("]"), (_) => result(new JsonArray(v)))
-        )
+            bind(charP("]"), (_) => result(new JsonArray(v)))
+          )
       )
     )
   )
