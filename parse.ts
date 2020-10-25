@@ -88,10 +88,13 @@ export function many<T>(p: Parser<T>): Parser<T[]> {
 
 // sepBy parses elements separated by sep
 export function sepBy<T, U>(sep: Parser<T>, elements: Parser<U>): Parser<U[]> {
-  return bind(elements, (v) =>
-    bind(many(bind(sep, (_) => bind(elements, (v) => result(v)))), (vs) =>
-      result([v, ...vs])
-    )
+  return either(
+    bind(elements, (v) =>
+      bind(many(bind(sep, (_) => bind(elements, (v) => result(v)))), (vs) =>
+        result([v, ...vs])
+      )
+    ),
+    result([])
   )
 }
 
@@ -108,6 +111,12 @@ export function stringP(str: string): Parser<string> {
 
   return bind(charP(str[0]), (ch) =>
     bind(stringP(str.slice(1)), (str) => result(ch + str))
+  )
+}
+
+export function stringLiteral(): Parser<string[]> {
+  return bind(charP('"'), (_) =>
+    bind(many(sat((b) => b != '"')), (v) => bind(charP('"'), (_) => result(v)))
   )
 }
 
