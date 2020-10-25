@@ -120,9 +120,11 @@ export function jsonValue(): Parser<JsonValue> {
   )
 }
 
-function _stringify(v: JsonValue, current: string): string {
+export function stringify(v: JsonValue): string {
+  let current = ""
+
   if (v instanceof JsonArray) {
-    current += `[${v.value.map((v) => _stringify(v, current)).join(",")}]`
+    current += `[${v.value.map((v) => stringify(v)).join(",")}]`
   }
 
   if (v instanceof JsonNumber) {
@@ -142,14 +144,8 @@ function _stringify(v: JsonValue, current: string): string {
   }
 
   if (v instanceof JsonObject) {
-    current += `{${v.pairs.map(
-      (pair) => `${pair[0]}:${_stringify(pair[1], current)}`
-    )}}`
+    current += `{${v.pairs.map((pair) => `${pair[0]}:${stringify(pair[1])}`)}}`
   }
 
   return current
-}
-
-export function stringify(v: JsonValue): string {
-  return _stringify(v, "")
 }
