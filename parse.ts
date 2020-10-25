@@ -41,11 +41,6 @@ export function sat(pred: (c: char) => boolean): Parser<char> {
   return bind(item(), (ch) => (pred(ch) ? result(ch) : zero()))
 }
 
-// digit parses a single digit
-export function digit(): Parser<char> {
-  return sat((d) => d >= "0" && d <= "9")
-}
-
 // either acts like an "or" / "either" operator
 // it uses `p` or `q` to parse the input
 export function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
@@ -81,6 +76,11 @@ export function sepBy<T, U>(sep: Parser<T>, elements: Parser<U>): Parser<U[]> {
 // whitespace eats whitespace
 export function whitespace(): Parser<string[]> {
   return many(sat((v) => v.trim() === ""))
+}
+
+// digit parses a single digit
+export function digit(): Parser<char> {
+  return sat((d) => d >= "0" && d <= "9")
 }
 
 export function stringLiteral(): Parser<string[]> {
