@@ -6,8 +6,8 @@ import {
   many,
   Parser,
   result,
-  sat,
   sepBy,
+  stringLiteral,
   stringP,
   whitespace,
   zero,
@@ -73,8 +73,6 @@ export function jsonArray(): Parser<JsonValue> {
         ),
         (v) =>
           bind(whitespace(), (_) =>
-      bind(elements, (v) =>
-        bind(whitespace(), (_) =>
             bind(charP("]"), (_) => result(new JsonArray(v)))
           )
       )
@@ -83,7 +81,24 @@ export function jsonArray(): Parser<JsonValue> {
 }
 
 export function jsonObject(): Parser<JsonValue> {
-  return result("hi")
+  return bind(charP("{"), (_) =>
+    bind(
+      many(
+        sepBy(
+          bind(whitespace(), (_) => bind(charP(","), (_) => whitespace())),
+          bind(stringLiteral(), (k) =>
+            bind(charP(":"), (_) =>
+              bind(jsonValue(), (v) => result({ key: k.join(""), value: v }))
+            )
+          )
+        )
+      ),
+      (kvs) =>
+        bind(charP("}"), (_) =>
+          result(new JsonObject(kvs.map((kv) => [kv[0].key, kv[0].value])))
+        )
+    )
+  )
 }
 
 export function jsonValue(): Parser<JsonValue> {
