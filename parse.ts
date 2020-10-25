@@ -86,6 +86,7 @@ export function many<T>(p: Parser<T>): Parser<T[]> {
   )
 }
 
+// sepBy parses elements separated by sep
 export function sepBy<T, U>(sep: Parser<T>, elements: Parser<U>): Parser<U[]> {
   return bind(elements, (v) =>
     bind(many(bind(sep, (_) => bind(elements, (v) => result(v)))), (vs) =>
