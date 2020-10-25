@@ -86,6 +86,19 @@ export function many<T>(p: Parser<T>): Parser<T[]> {
   )
 }
 
+export function sepBy<T, U>(sep: Parser<T>, elements: Parser<U>): Parser<U[]> {
+  return bind(elements, (v) =>
+    bind(many(bind(sep, (_) => bind(elements, (v) => result(v)))), (vs) =>
+      result([v, ...vs])
+    )
+  )
+}
+
+// whitespace eats whitespace
+export function whitespace(): Parser<string[]> {
+  return many(sat((v) => v.trim() === ""))
+}
+
 // stringP parses a specific string
 export function stringP(str: string): Parser<string> {
   if (str === "") {
