@@ -2,6 +2,8 @@
 
 JSON parser in <https://deno.land> / TypeScript
 
+![](./example.png)
+
 ## TODO
 
 - [x] Basic building parser blocks 
