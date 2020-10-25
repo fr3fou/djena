@@ -64,9 +64,12 @@ export function jsonString(): Parser<JsonValue> {
 }
 
 export function jsonArray(): Parser<JsonValue> {
-  const elements = sepBy(
-    bind(whitespace(), (_) => bind(charP(","), (_) => whitespace())),
-    jsonValue()
+  return bind(charP("["), (_) =>
+    bind(whitespace(), (_) =>
+      bind(
+        sepBy(
+          bind(whitespace(), (_) => bind(charP(","), (_) => whitespace())),
+          jsonValue()
   )
   return bind(charP("["), (_) =>
     bind(whitespace(), (_) =>
