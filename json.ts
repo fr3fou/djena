@@ -120,32 +120,34 @@ export function jsonValue(): Parser<JsonValue> {
   )
 }
 
-export function stringify(v: JsonValue): string {
-  let current = ""
-
+export function stringify(v: JsonValue, names: boolean): string {
   if (v instanceof JsonArray) {
-    current += `[${v.value.map((v) => stringify(v)).join(",")}]`
+    return `[${names && "JsonArray: "}${v.value
+      .map((v) => stringify(v, names))
+      .join(",")}]`
   }
 
   if (v instanceof JsonNumber) {
-    current += v.value.toString()
+    return `${names && "JsonNumber: "}${v.value.toString()}`
   }
 
   if (v instanceof JsonString) {
-    current += `"${v.value}"`
+    return `"${names && "JsonString: "}${v.value}"`
   }
 
   if (v instanceof JsonNull) {
-    current += "null"
+    return `${names && "JsonNull: "}null`
   }
 
   if (v instanceof JsonBool) {
-    current += v.value ? "true" : "false"
+    return `${names && "JsonBool: "}${v.value ? "true" : "false"}`
   }
 
   if (v instanceof JsonObject) {
-    current += `{${v.pairs.map((pair) => `${pair[0]}:${stringify(pair[1])}`)}}`
+    return `{${v.pairs.map(
+      (pair) => `${pair[0]}:${stringify(pair[1], names)}`
+    )}}`
   }
 
-  return current
+  return ""
 }
