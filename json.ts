@@ -120,7 +120,7 @@ export function jsonValue(): Parser<JsonValue> {
   )
 }
 
-export function stringify(v: JsonValue, names: boolean): string {
+export function stringify(v: JsonValue, names?: boolean): string {
   if (v instanceof JsonArray) {
     return `[${names && "JsonArray: "}${v.value
       .map((v) => stringify(v, names))
