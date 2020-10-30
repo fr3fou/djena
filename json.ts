@@ -145,7 +145,7 @@ export function stringify(v: JsonValue, names?: boolean): string {
 
   if (v instanceof JsonObject) {
     return `{${v.pairs.map(
-      (pair) => `${pair[0]}:${stringify(pair[1], names)}`
+      (pair) => `"${pair[0]}":${stringify(pair[1], names)}`
     )}}`
   }
 
