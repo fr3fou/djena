@@ -43,7 +43,7 @@ export function sat(pred: (c: char) => boolean): Parser<char> {
 
 // either acts like an "or" / "either" operator
 // it uses `p` or `q` to parse the input
-export function either<T>(p: Parser<T>, q: Parser<T>): Parser<T> {
+export function either<T, U>(p: Parser<T>, q: Parser<U>): Parser<T | U> {
   return (input) => {
     const first = p(input)
     if (first.length === 0) {

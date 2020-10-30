@@ -43,27 +43,27 @@ export type JsonValue =
   | JsonArray
   | JsonObject
 
-export function jsonNull(): Parser<JsonValue> {
+export function jsonNull(): Parser<JsonNull> {
   return bind(stringP("null"), (_) => result(new JsonNull()))
 }
 
-export function jsonBool(): Parser<JsonValue> {
+export function jsonBool(): Parser<JsonBool> {
   return bind(either(stringP("true"), stringP("false")), (v) =>
     result(new JsonBool(v === "true"))
   )
 }
 
-export function jsonNumber(): Parser<JsonValue> {
+export function jsonNumber(): Parser<JsonNumber> {
   return bind(many(digit()), (d) =>
     d.length === 0 ? zero() : result(new JsonNumber(Number(d.join(""))))
   )
 }
 
-export function jsonString(): Parser<JsonValue> {
+export function jsonString(): Parser<JsonString> {
   return bind(stringLiteral(), (v) => result(new JsonString(v.join(""))))
 }
 
-export function jsonArray(): Parser<JsonValue> {
+export function jsonArray(): Parser<JsonArray> {
   return bind(charP("["), (_) =>
     bind(whitespace(), (_) =>
       bind(
@@ -80,7 +80,7 @@ export function jsonArray(): Parser<JsonValue> {
   )
 }
 
-export function jsonObject(): Parser<JsonValue> {
+export function jsonObject(): Parser<JsonObject> {
   return bind(charP("{"), (_) =>
     bind(whitespace(), (_) =>
       bind(
