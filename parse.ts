@@ -30,9 +30,7 @@ export function item(): Parser<char> {
 // It's equivalent to haskell's monad >>= operator
 export function bind<T, U>(p: Parser<T>, fn: (a: T) => Parser<U>): Parser<U> {
   return (input) =>
-    p(input)
-      .map(([output, inputPrime]) => fn(output)(inputPrime))
-      .flat()
+    p(input).flatMap(([output, inputPrime]) => fn(output)(inputPrime))
 }
 
 // sat parses a single character and if it matches the predicate,
