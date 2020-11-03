@@ -6,7 +6,7 @@ JSON parser in <https://deno.land> / TypeScript
 
 ## TODO
 
-- [x] Basic building parser blocks 
+- [x] Basic building parser blocks
   - [x] `result`
   - [x] `zero`
   - [x] `item`
@@ -15,16 +15,19 @@ JSON parser in <https://deno.land> / TypeScript
   - [x] `either`
   - [x] `sepBy`
   - [x] `many`
- - [x] JSON
-   - [x] Booleans
-   - [x] String literals
-      - [ ] Escape support
-   - [x] Numbers
-      - [ ] Floats
-      - [ ] Negatives
-   - [x] Arrays
-   - [x] Objects
-   - [x] null
+  - [ ] `EOF`
+  - [ ] `oneOf`
+  - [ ] `seq`
+- [x] JSON
+  - [x] Booleans
+  - [x] String literals
+    - [ ] Escape support
+  - [x] Numbers
+    - [ ] Floats
+    - [ ] Negatives
+  - [x] Arrays
+  - [x] Objects
+  - [x] null
 
 ## References
 
