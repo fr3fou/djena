@@ -17,6 +17,7 @@ JSON parser in <https://deno.land> / TypeScript
   - [x] `many`
   - [ ] `EOF`
   - [ ] `oneOf`
+  - [ ] `fmap`
   - [ ] `seq`
 - [x] JSON
   - [x] Booleans
