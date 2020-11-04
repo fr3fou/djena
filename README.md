@@ -36,3 +36,4 @@ JSON parser in <https://deno.land> / TypeScript
 - <http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf>
 - <https://www.youtube.com/watch?v=N9RUqGYuGfw>
 - <https://beau.collins.pub/2020/parser-and-getting-complicated-with-types/>
+- <https://www.sigmacomputing.com/blog/writing-a-parser-combinator-from-scratch-in-typescript/>
