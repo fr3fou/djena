@@ -35,3 +35,4 @@ JSON parser in <https://deno.land> / TypeScript
 
 - <http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf>
 - <https://www.youtube.com/watch?v=N9RUqGYuGfw>
+- <https://beau.collins.pub/2020/parser-and-getting-complicated-with-types/>

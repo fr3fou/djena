@@ -3,6 +3,8 @@
 // Empty array means it failed parsing
 export type Parser<T> = (s: string) => Array<[T, string]>
 export type char = string
+// https://beau.collins.pub/2020/parser-and-getting-complicated-with-types/
+type ParserType<T> = T extends Parser<infer U> ? U : never
 
 // result unconditionally returns the value
 export function result<T>(v: T): Parser<T> {
@@ -39,15 +41,21 @@ export function sat(pred: (c: char) => boolean): Parser<char> {
   return bind(item(), (ch) => (pred(ch) ? result(ch) : zero()))
 }
 
-// either acts like an "or" / "either" operator
+// either returns the first successfull parser
 // it uses `p` or `q` to parse the input
-export function either<T, U>(p: Parser<T>, q: Parser<U>): Parser<T | U> {
+// deno-lint-ignore no-explicit-any
+export function either<P extends Parser<any>[]>(
+  ...ps: P
+): Parser<ParserType<P[number]>> {
   return (input) => {
-    const first = p(input)
-    if (first.length === 0) {
-      return q(input)
+    for (const p of ps) {
+      const out = p(input)
+      if (out.length !== 0) {
+        return out
+      }
     }
-    return first
+
+    return []
   }
 }
 
