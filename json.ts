@@ -79,7 +79,6 @@ export function jsonArray(): Parser<JsonArray> {
     )
   )
 }
-
 export function jsonObject(): Parser<JsonObject> {
   return bind(charP("{"), (_) =>
     bind(whitespace(), (_) =>
@@ -110,13 +109,11 @@ export function jsonObject(): Parser<JsonObject> {
 export function jsonValue(): Parser<JsonValue> {
   return either(
     jsonNull(),
-    either(
-      jsonNumber(),
-      either(
-        jsonBool(),
-        either(jsonString(), either(jsonArray(), jsonObject()))
-      )
-    )
+    jsonNumber(),
+    jsonBool(),
+    jsonString(),
+    jsonArray(),
+    jsonObject()
   )
 }
 
