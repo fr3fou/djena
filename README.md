@@ -26,7 +26,7 @@ JSON parser in <https://deno.land> / TypeScript
     - [ ] Escape support
   - [x] Numbers
     - [ ] Floats
-    - [ ] Negatives
+    - [x] Negatives
   - [x] Arrays
   - [x] Objects
   - [x] null

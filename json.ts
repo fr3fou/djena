@@ -54,8 +54,12 @@ export function jsonBool(): Parser<JsonBool> {
 }
 
 export function jsonNumber(): Parser<JsonNumber> {
-  return bind(many(digit()), (d) =>
-    d.length === 0 ? zero() : result(new JsonNumber(Number(d.join(""))))
+  return bind(
+    either(
+      bind(charP("-"), (m) => bind(many(digit()), (d) => result([m, ...d]))),
+      many(digit())
+    ),
+    (v) => (v.length == 0 ? zero() : result(new JsonNumber(Number(v.join("")))))
   )
 }
 
