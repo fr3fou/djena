@@ -110,9 +110,3 @@ export function stringP(str: string): Parser<string> {
 export function charP(c: char): Parser<char> {
   return sat((d) => d == c)
 }
-
-// peekNext checks if something can be parsed
-// and returns true or false and the same input
-export function peekNext<T>(p: Parser<T>): Parser<boolean> {
-  return (input) => [[p(input).length !== 0, input]]
-}
